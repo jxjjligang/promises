@@ -1,0 +1,47 @@
+<html>
+
+<head title="fault tolerant of Promise All, even with JSON">
+
+</head>
+
+<body>
+    <div id="root">
+        <input type="button" onclick="promiseAll()" value="Fetch JSON content" />
+    </div>
+
+    <script>
+        let alert = console.log;
+        function promiseAll() {
+            // the whole promise chain fails with an error here
+            // change that:
+            // make errors appear as members of the results array
+
+            let urls = [
+                'https://api.github.com/users/iliakan',
+                // this URL is HTML page, it's invalid JSON, so response.json() fails
+                'https://github.com/',
+                // this URL is invalid, so fetch fails
+                'http://no-such-url'
+            ];
+
+            // Fix it:
+            Promise.all(urls.map(url => fetch(url).catch(edd => edd)))
+                .then(responses =>
+                    Promise.all(
+                        responses.map(r => (r instanceof Error) ? r : r.json().catch(eddr => eddr))
+                    )
+                )
+                // Demo output (no need to change):
+                .then(results => {
+                    alert(results);
+                    alert(results[0].name); // Ilya Kantor
+                    alert(results[1]); // SyntaxError: Unexpected token < in JSON at position 0
+                    alert(results[2]); // TypeError: failed to fetch (text may vary)
+                });
+        }
+
+
+    </script>
+</body>
+
+</html>
