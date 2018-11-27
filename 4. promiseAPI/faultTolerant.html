@@ -1,0 +1,43 @@
+<html>
+
+<head title="fault tolerant of Promise All">
+
+</head>
+
+<body>
+    <div id="root">
+        <input type="button" onclick="promiseAll()" value="Fetch 3 URLs" />
+    </div>
+
+    <script>
+        let alert = console.log;
+        function promiseAll() {
+            Promise.all(createPromises())
+                // for each response show its status
+                .then(responses => {
+                    for (let response of responses) {
+                        alert(`${response.url}: ${response.status}`);
+                    }
+                });
+        }
+
+        function createPromises() {
+            let urls = [
+                'https://api.github.com/users/iliakan',
+                'https://api.github.com/users/remy',
+                'https://api.github.com/users/jeresig'
+                , 'http://no-such-url'
+            ];
+            return urls.map(url => fetch(url).then(response => Promise.resolve(response), error =>
+                // console.log(`Ex:${error}`)
+                Promise.resolve({
+                    url: url,
+                    status: 'fail',
+                    error: error
+                })
+            ));
+        }
+    </script>
+</body>
+
+</html>
