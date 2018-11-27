@@ -20,15 +20,17 @@
                 throw new Error(response.status);
         }
 
-        let urls = ['https://api.github.com/no-such-user.json', 'https://api.github.com/users/jxjjligang'];
-        urls.every(url => {
+        async function loadURLs() {
+            // let url = 'https://api.github.com/no-such-user.json';
+            let url = 'https://api.github.com/users/jxjjligang';
             try {
-                loadJson(url);
+                await loadJson(url);
             } catch (error) {
-                alert(error);
+                alert(`Caught: ${error}`);
             }
         }
-        );  
+
+        loadURLs();
     </script>
 </body>
 
