@@ -1,0 +1,29 @@
+<html>
+
+<head title="promise chaining">
+
+</head>
+
+<body>
+    <div id="root">
+    </div>
+
+    <script>
+        let alert = console.log;
+        function loadJson(url) {
+            return fetch(url)
+                .then(response => {
+                    if (response.status == 200) {
+                        return response.json();
+                    } else {
+                        throw new Error(response.status);
+                    }
+                })
+        }
+
+        let urls = ['https://api.github.com/users/jxjjligang', 'https://api.github.com/no-such-user.json'];
+        urls.every(url => loadJson(url).then(json => root.textContent += JSON.stringify(json)).catch(alert));
+    </script>
+</body>
+
+</html>
