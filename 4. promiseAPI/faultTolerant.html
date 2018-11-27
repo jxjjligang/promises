@@ -28,14 +28,7 @@
                 'https://api.github.com/users/jeresig'
                 , 'http://no-such-url'
             ];
-            return urls.map(url => fetch(url).then(response => Promise.resolve(response), error =>
-                // console.log(`Ex:${error}`)
-                Promise.resolve({
-                    url: url,
-                    status: 'fail',
-                    error: error
-                })
-            ));
+            return urls.map(url => fetch(url).catch(err => err));
         }
     </script>
 </body>
